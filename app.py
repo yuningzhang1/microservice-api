@@ -1,38 +1,32 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-app = FastAPI(title="Text Classifier API")
+# Create FastAPI application
+app = FastAPI(title="Text Classification API")
 
-# Request format
+# Define the request format using Pydantic
 class PredictRequest(BaseModel):
     text: str
 
-# Root endpoint
-@app.get("/")
-def root():
-    return {"message": "API is running"}
-
-# Prediction endpoint
-@app.post("/predict")
-def predict(req: PredictRequest):
-    # fake prediction (for assignment)
-    return {
-        "input_text": req.text,
-        "prediction": "positive"
-    }
-from fastapi import FastAPI
-import joblib
-
-app = FastAPI()
-
-model = joblib.load("model.joblib")
-
+# Root endpoint (to check if API is running)
 @app.get("/")
 def home():
     return {"message": "API is running"}
 
+# Prediction endpoint
 @app.post("/predict")
-def predict(data: dict):
-    text = data["text"]
-    prediction = model.predict([text])[0]
-    return {"prediction": str(prediction)}
+def predict(request: PredictRequest):
+    """
+    This endpoint receives a text input and returns a prediction.
+    For assignment purposes, we return a simple placeholder result.
+    """
+    
+    input_text = request.text
+
+    # Simple placeholder prediction (no model required)
+    prediction = "positive"
+
+    return {
+        "input_text": input_text,
+        "prediction": prediction
+    }
