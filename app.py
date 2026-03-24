@@ -20,3 +20,19 @@ def predict(req: PredictRequest):
         "input_text": req.text,
         "prediction": "positive"
     }
+from fastapi import FastAPI
+import joblib
+
+app = FastAPI()
+
+model = joblib.load("model.joblib")
+
+@app.get("/")
+def home():
+    return {"message": "API is running"}
+
+@app.post("/predict")
+def predict(data: dict):
+    text = data["text"]
+    prediction = model.predict([text])[0]
+    return {"prediction": str(prediction)}
